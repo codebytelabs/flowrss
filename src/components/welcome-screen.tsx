@@ -77,44 +77,69 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
   if (step === 'intro') {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-2xl w-full text-center space-y-8">
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <div className="p-4 bg-primary rounded-2xl">
-                <Rss className="w-12 h-12 text-primary-foreground" />
-              </div>
+        <div className="max-w-4xl w-full space-y-16">
+          {/* Hero Section - Folo inspired */}
+          <div className="text-center space-y-6 pt-16">
+            {/* Logo with gradient */}
+            <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary to-accent shadow-2xl flex items-center justify-center">
+              <Rss className="w-12 h-12 text-white" />
             </div>
-            <h1 className="text-5xl font-bold">FlowRSS</h1>
-            <p className="text-xl text-muted-foreground">Your content, in flow.</p>
+
+            {/* Hero Text */}
+            <div className="space-y-4">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                Welcome to FlowRSS
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Your modern, privacy-first RSS reader with Fediverse support.
+                Organize, read, and discover content from across the web.
+              </p>
+            </div>
+
+            {/* CTA */}
+            <div className="pt-4">
+              <Button
+                size="lg"
+                onClick={() => setStep('packs')}
+                className="px-8 py-6 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200 font-semibold text-lg"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-8">
-            <Card className="p-6 space-y-2">
-              <Shield className="w-8 h-8 text-primary mx-auto" />
-              <h3 className="font-semibold">Privacy First</h3>
-              <p className="text-sm text-muted-foreground">
-                No tracking, no signup required. Your data stays local.
+          {/* Features Grid - Folo style cards */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="group p-8 rounded-2xl bg-white/80 dark:bg-black/80 backdrop-blur-md border border-white/20 dark:border-black/20 hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-200">
+                <Shield className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-3">Privacy First</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Your data stays on your device. No tracking, no ads, no accounts required.
               </p>
             </Card>
-            <Card className="p-6 space-y-2">
-              <Zap className="w-8 h-8 text-primary mx-auto" />
-              <h3 className="font-semibold">Offline First</h3>
-              <p className="text-sm text-muted-foreground">
-                Read anywhere, anytime. Works without internet.
+
+            <Card className="group p-8 rounded-2xl bg-white/80 dark:bg-black/80 backdrop-blur-md border border-white/20 dark:border-black/20 hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-200">
+                <Zap className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-3">Offline First</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Read anywhere, anytime. All your articles are stored locally for offline access.
               </p>
             </Card>
-            <Card className="p-6 space-y-2">
-              <Sparkles className="w-8 h-8 text-primary mx-auto" />
-              <h3 className="font-semibold">AI Enhanced</h3>
-              <p className="text-sm text-muted-foreground">
-                Optional AI summaries and smart recommendations.
+
+            <Card className="group p-8 rounded-2xl bg-white/80 dark:bg-black/80 backdrop-blur-md border border-white/20 dark:border-black/20 hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-200">
+                <Sparkles className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-3">Smart Organization</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Create folders, use auto-categories, and organize feeds exactly how you want them.
               </p>
             </Card>
           </div>
-
-          <Button size="lg" onClick={() => setStep('packs')} className="px-8">
-            Get Started
-          </Button>
         </div>
       </div>
     );

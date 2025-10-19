@@ -17,6 +17,8 @@ import {
   Inbox,
   Star,
   Bookmark,
+  FolderOpen,
+  Hash,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FolderList } from '../sidebar/folder-list';
@@ -104,20 +106,22 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        {/* Header */}
-        <div className="p-4 border-b flex items-center justify-between">
+        {/* Header - Folo style */}
+        <div className="p-4 border-b">
           <div className="flex items-center gap-2">
-            <Rss className="w-6 h-6 text-primary" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
+              <Rss className="w-5 h-5 text-white" />
+            </div>
             <span className="font-bold text-lg">FlowRSS</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onToggle}
+              className="ml-auto lg:hidden"
+            >
+              <X className="w-4 h-4" />
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className="lg:hidden"
-          >
-            <X className="w-4 h-4" />
-          </Button>
         </div>
 
         {/* Search */}
@@ -129,11 +133,14 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           />
         </div>
 
-        {/* Quick filters */}
+        {/* Quick filters - Folo style */}
         <div className="p-2 border-b space-y-1">
           <Button
             variant={currentFilter === 'all' && !selectedFeed ? 'secondary' : 'ghost'}
-            className="w-full justify-start"
+            className={cn(
+              "w-full justify-start transition-all duration-200",
+              currentFilter === 'all' && !selectedFeed && "bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
+            )}
             onClick={() => {
               console.log('[Sidebar] All Articles clicked');
               onFilterChange('all');
@@ -144,7 +151,10 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           </Button>
           <Button 
             variant={currentFilter === 'starred' ? 'secondary' : 'ghost'}
-            className="w-full justify-start"
+            className={cn(
+              "w-full justify-start transition-all duration-200",
+              currentFilter === 'starred' && "bg-yellow-500/10 text-yellow-600 border border-yellow-500/20 hover:bg-yellow-500/20"
+            )}
             onClick={() => {
               console.log('[Sidebar] Starred clicked');
               onFilterChange('starred');
@@ -155,7 +165,10 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           </Button>
           <Button 
             variant={currentFilter === 'saved' ? 'secondary' : 'ghost'}
-            className="w-full justify-start"
+            className={cn(
+              "w-full justify-start transition-all duration-200",
+              currentFilter === 'saved' && "bg-accent/50 text-accent-foreground border border-accent hover:bg-accent/70"
+            )}
             onClick={() => {
               console.log('[Sidebar] Saved clicked');
               onFilterChange('saved');
@@ -201,11 +214,21 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           </div>
         </div>
 
-        {/* Footer actions */}
+        {/* Footer actions - Folo style */}
         <div className="p-2 border-t space-y-1">
           <Button
             variant="ghost"
-            className="w-full justify-start"
+            className="w-full justify-start hover:scale-[1.02] transition-all duration-200 font-medium"
+            onClick={() => window.dispatchEvent(new CustomEvent('openAddFeed'))}
+          >
+            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center mr-2">
+              <Plus className="w-3 h-3 text-primary" />
+            </div>
+            Add Feed
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start hover:scale-[1.02] transition-all duration-200"
             onClick={handleRefreshAll}
             disabled={isRefreshing}
           >
@@ -214,15 +237,7 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           </Button>
           <Button 
             variant="ghost" 
-            className="w-full justify-start"
-            onClick={() => window.dispatchEvent(new CustomEvent('openAddFeed'))}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Feed
-          </Button>
-          <Button 
-            variant="ghost" 
-            className="w-full justify-start"
+            className="w-full justify-start hover:scale-[1.02] transition-all duration-200"
             onClick={() => window.dispatchEvent(new CustomEvent('openSettings'))}
           >
             <Settings className="w-4 h-4 mr-2" />

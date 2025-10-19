@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import { dbOperations } from '@/lib/db/schema';
 import type { Article, Feed } from '@/types';
-import { Card } from '@/components/ui/card';
-import { formatRelativeTime, truncateText, extractDomain } from '@/lib/utils';
-import { Star, Bookmark, ExternalLink, Rss } from 'lucide-react';
+import { TimelineCard } from './timeline-card';
 import { cn } from '@/lib/utils';
+import { Rss, Plus } from 'lucide-react';
 
 interface ArticleListProps {
   feed: Feed | null;
@@ -76,22 +75,36 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
     );
   }
 
+  // Empty state component
+  const EmptyState = () => (
+    <div className="flex flex-col items-center justify-center py-16 px-4">
+      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+        <Rss className="w-8 h-8 text-muted-foreground" />
+      </div>
+      <h3 className="text-lg font-semibold mb-2">
+        {filterMode === 'starred' ? 'No starred articles yet' :
+         filterMode === 'saved' ? 'No saved articles yet' :
+         feed ? 'No articles in this feed' : 'No articles yet'}
+      </h3>
+      <p className="text-sm text-muted-foreground text-center mb-4 max-w-sm">
+        {filterMode === 'starred' ? 'Star articles you want to read later.' :
+         filterMode === 'saved' ? 'Save articles to your reading list.' :
+         feed ? 'This feed doesn\'t have any articles yet.' : 'Subscribe to feeds to start reading.'}
+      </p>
+      {!feed && (
+        <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <Plus className="w-4 h-4" />
+          Add Feed
+        </button>
+      )}
+    </div>
+  );
+
   if (articles.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-4 max-w-md p-8">
-          <div className="text-6xl mb-4">📰</div>
-          <h3 className="text-xl font-semibold">No articles yet</h3>
-          <p className="text-muted-foreground">
-            {feed 
-              ? 'Click "Refresh All" in the sidebar to fetch articles from this feed.' 
-              : 'Click "Refresh All" in the sidebar to fetch articles from your feeds.'}
-          </p>
-          <div className="pt-4">
-            <p className="text-sm text-muted-foreground">
-              💡 Tip: Articles will load automatically when you add new feeds
-            </p>
-          </div>
+      <div className="flex-1 overflow-y-auto bg-background">
+        <div className="max-w-timeline mx-auto py-6 px-4">
+          <EmptyState />
         </div>
       </div>
     );
@@ -99,132 +112,38 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
 
   return (
     <div className="flex-1 overflow-y-auto bg-background">
-      <div className="max-w-3xl mx-auto p-4 space-y-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">
+      {/* Folo-inspired timeline layout */}
+      <div className="max-w-timeline mx-auto py-6 px-4">
+        {/* Timeline Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold mb-2">
             {filterMode === 'starred' ? 'Starred Articles' : 
              filterMode === 'saved' ? 'Saved Articles' :
              feed ? feed.title : 'All Articles'}
-          </h2>
-          <span className="text-sm text-muted-foreground">
-            {articles.length} {articles.length === 1 ? 'article' : 'articles'}
-          </span>
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {articles.length > 0 ? (
+              `${articles.length} ${articles.length === 1 ? 'article' : 'articles'}`
+            ) : (
+              'No articles to show'
+            )}
+          </p>
         </div>
 
-        <div className="space-y-3">
+        {/* Timeline Content */}
+        <div className="space-y-4 animate-fade-in">
           {articles.map(article => (
-            <Card
+            <TimelineCard
               key={article.id}
-              className={cn(
-                'group cursor-pointer transition-all hover:shadow-md border overflow-hidden',
-                selectedArticle?.id === article.id && 'ring-2 ring-primary',
-                !article.isRead && 'border-l-4 border-l-primary'
-              )}
-              onClick={() => {
+              article={article}
+              isSelected={selectedArticle?.id === article.id}
+              onSelect={() => {
                 onSelectArticle(article);
                 dbOperations.markAsRead(article.id);
               }}
-            >
-              <div className="flex gap-3 p-3">
-                {/* Thumbnail - Fixed 120x120 square */}
-                {article.imageUrl ? (
-                  <div className="flex-shrink-0 w-[120px] h-[120px] rounded-md overflow-hidden bg-muted">
-                    <img
-                      src={article.imageUrl}
-                      alt=""
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        e.currentTarget.parentElement!.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex-shrink-0 w-[120px] h-[120px] rounded-md bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                    <Rss className="w-8 h-8 text-muted-foreground/30" />
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="flex-1 min-w-0 flex flex-col justify-between">
-                  {/* Top section */}
-                  <div className="space-y-1.5">
-                    {/* Source and metadata */}
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <img
-                        src={`https://www.google.com/s2/favicons?domain=${extractDomain(article.link)}&sz=16`}
-                        alt=""
-                        className="w-3.5 h-3.5"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                      <span className="font-medium truncate">{extractDomain(article.link)}</span>
-                      <span>•</span>
-                      <span className="whitespace-nowrap">{formatRelativeTime(article.pubDate)}</span>
-                      {!article.isRead && (
-                        <span className="ml-auto px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-medium rounded">
-                          NEW
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-semibold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                      {article.title}
-                    </h3>
-
-                    {/* Description */}
-                    {article.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                        {truncateText(article.description, 150)}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Bottom section - Actions */}
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      {article.author && (
-                        <span className="truncate max-w-[150px]">by {article.author}</span>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={e => handleToggleStar(e, article.id)}
-                        className={cn(
-                          'p-1.5 rounded hover:bg-accent transition-colors',
-                          article.isStarred && 'text-yellow-500'
-                        )}
-                        title={article.isStarred ? 'Unstar' : 'Star'}
-                      >
-                        <Star
-                          className={cn(
-                            'w-4 h-4',
-                            article.isStarred && 'fill-current'
-                          )}
-                        />
-                      </button>
-                      <button
-                        onClick={e => handleToggleSave(e, article.id)}
-                        className={cn(
-                          'p-1.5 rounded hover:bg-accent transition-colors',
-                          article.isSaved && 'text-primary'
-                        )}
-                        title={article.isSaved ? 'Unsave' : 'Save'}
-                      >
-                        <Bookmark
-                          className={cn(
-                            'w-4 h-4',
-                            article.isSaved && 'fill-current'
-                          )}
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
+              onToggleStar={(e) => handleToggleStar(e, article.id)}
+              onToggleSave={(e) => handleToggleSave(e, article.id)}
+            />
           ))}
         </div>
       </div>

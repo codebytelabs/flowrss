@@ -43,11 +43,18 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Folo-inspired colors
+        'folo-orange': '#FF5C00',
+        'warm-accent': '#FF6B35',
+        'soft-peach': '#FFE5D9',
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      maxWidth: {
+        'timeline': '42rem', // 672px - Folo's timeline width
       },
     },
   },
