@@ -1,0 +1,296 @@
+[
+  {
+    "title": "Ars Technica",
+    "feed_url": "https://arstechnica.com/feed/",
+    "website": "https://arstechnica.com/",
+    "tags": ["tech", "science", "policy", "deep-dive"]
+  },
+  {
+    "title": "A List Apart",
+    "feed_url": "https://alistapart.com/main/feed/",
+    "website": "https://alistapart.com/",
+    "tags": ["design", "ux", "frontend", "web-standards"]
+  },
+  {
+    "title": "BBC News - Technology",
+    "feed_url": "https://feeds.bbci.co.uk/news/technology/rss.xml",
+    "website": "https://www.bbc.com/news/technology",
+    "tags": ["news", "technology", "global"]
+  },
+  {
+    "title": "BBC News - World",
+    "feed_url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "website": "https://www.bbc.com/news",
+    "tags": ["news", "global", "world"]
+  },
+  {
+    "title": "Ben Thompson (Stratechery) - Articles",
+    "feed_url": "https://stratechery.com/feed/",
+    "website": "https://stratechery.com/",
+    "tags": ["business", "strategy", "tech", "analysis"]
+  },
+  {
+    "title": "Brain Pickings (Maria Popova)",
+    "feed_url": "https://feeds.feedburner.com/brainpickings/rss",
+    "website": "https://www.brainpickings.org/",
+    "tags": ["essays", "culture", "reading", "longform"]
+  },
+  {
+    "title": "Calm Code / Developer Blogs (Dev.to)",
+    "feed_url": "https://dev.to/feed",
+    "website": "https://dev.to/",
+    "tags": ["developer", "blogs", "programming", "community"]
+  },
+  {
+    "title": "Cloudflare Blog",
+    "feed_url": "https://blog.cloudflare.com/feed/",
+    "website": "https://blog.cloudflare.com/",
+    "tags": ["devops", "networking", "security", "cloud"]
+  },
+  {
+    "title": "CoinDesk",
+    "feed_url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+    "website": "https://www.coindesk.com/",
+    "tags": ["crypto", "blockchain", "finance", "news"]
+  },
+  {
+    "title": "Cointelegraph",
+    "feed_url": "https://cointelegraph.com/rss",
+    "website": "https://cointelegraph.com/",
+    "tags": ["crypto", "blockchain", "news"]
+  },
+  {
+    "title": "CSS-Tricks",
+    "feed_url": "https://css-tricks.com/feed/",
+    "website": "https://css-tricks.com/",
+    "tags": ["css", "frontend", "webdev", "design"]
+  },
+  {
+    "title": "DeepMind Blog",
+    "feed_url": "https://deepmind.com/blog/rss.xml",
+    "website": "https://deepmind.com/",
+    "tags": ["ai", "research", "ml"]
+  },
+  {
+    "title": "DevOps & Engineering (Engineering at Meta)",
+    "feed_url": "https://engineering.fb.com/feed/",
+    "website": "https://engineering.fb.com/",
+    "tags": ["technology", "social-media", "scalability", "ai"]
+  },
+  {
+    "title": "Developer: GitHub Blog",
+    "feed_url": "https://github.blog/feed/",
+    "website": "https://github.blog/",
+    "tags": ["developer", "engineering", "opensource", "tools"]
+  },
+  {
+    "title": "Developer: Google Developers Blog",
+    "feed_url": "https://developers.googleblog.com/atom.xml",
+    "website": "https://developers.googleblog.com/",
+    "tags": ["developer", "cloud", "android", "tools"]
+  },
+  {
+    "title": "Developer: Netflix Tech Blog",
+    "feed_url": "https://netflixtechblog.com/feed/",
+    "website": "https://netflixtechblog.com/",
+    "tags": ["technology", "streaming", "big-data", "opensource"]
+  },
+  {
+    "title": "Entrepreneur",
+    "feed_url": "https://www.entrepreneur.com/latest.rss",
+    "website": "https://www.entrepreneur.com/",
+    "tags": ["business", "startups", "marketing"]
+  },
+  {
+    "title": "Feedly / Hacker News (Y Combinator)",
+    "feed_url": "https://news.ycombinator.com/rss",
+    "website": "https://news.ycombinator.com/",
+    "tags": ["tech", "startups", "news", "curation", "programming"]
+  },
+  {
+    "title": "GitHub Blog – Engineering",
+    "feed_url": "https://github.blog/engineering/feed/",
+    "website": "https://github.blog/engineering/",
+    "tags": ["developer", "engineering", "opensource", "tools"]
+  },
+  {
+    "title": "Harvard Business Review - Latest",
+    "feed_url": "https://hbr.org/rss",
+    "website": "https://hbr.org/",
+    "tags": ["business", "strategy", "management"]
+  },
+  {
+    "title": "Indie Hackers",
+    "feed_url": "https://www.indiehackers.com/feed",
+    "website": "https://www.indiehackers.com/",
+    "tags": ["startups", "founders", "stories", "product"]
+  },
+  {
+    "title": "Julian Shapiro – Growth Blog",
+    "feed_url": "https://www.julian.com/rss.xml",
+    "website": "https://www.julian.com/",
+    "tags": ["growth", "marketing", "startup"]
+  },
+  {
+    "title": "Lex Fridman Podcast",
+    "feed_url": "https://lexfridman.com/feed/podcast/",
+    "website": "https://lexfridman.com/podcast/",
+    "tags": ["podcast", "ai", "research", "longform"]
+  },
+  {
+    "title": "MIT News",
+    "feed_url": "https://news.mit.edu/rss/feed",
+    "website": "https://news.mit.edu/",
+    "tags": ["science", "research", "education", "tech"]
+  },
+  {
+    "title": "MIT Technology Review",
+    "feed_url": "https://www.technologyreview.com/feed/",
+    "website": "https://www.technologyreview.com/",
+    "tags": ["tech", "research", "ai", "future"]
+  },
+  {
+    "title": "NASA Breaking News",
+    "feed_url": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+    "website": "https://www.nasa.gov/",
+    "tags": ["space", "research", "innovation", "science"]
+  },
+  {
+    "title": "Nature – News",
+    "feed_url": "https://www.nature.com/nature.rss",
+    "website": "https://www.nature.com/",
+    "tags": ["science", "research", "biology", "environment"]
+  },
+  {
+    "title": "NPR – Technology",
+    "feed_url": "https://www.npr.org/rss/rss.php?id=1001",
+    "website": "https://www.npr.org/",
+    "tags": ["news", "public-radio", "culture"]
+  },
+  {
+    "title": "The Atlantic",
+    "feed_url": "https://www.theatlantic.com/feed/all/",
+    "website": "https://www.theatlantic.com/",
+    "tags": ["culture", "politics", "longform", "analysis"]
+  },
+  {
+    "title": "The Daily (NYT) – Podcast",
+    "feed_url": "https://rss.art19.com/the-daily",
+    "website": "https://www.nytimes.com/column/the-daily",
+    "tags": ["podcast", "news"]
+  },
+  {
+    "title": "The Economist – RSS",
+    "feed_url": "https://www.economist.com/the-world-this-week/rss.xml",
+    "website": "https://www.economist.com/",
+    "tags": ["news", "business", "analysis"]
+  },
+  {
+    "title": "The Guardian – Technology",
+    "feed_url": "https://www.theguardian.com/uk/technology/rss",
+    "website": "https://www.theguardian.com/uk/technology",
+    "tags": ["news", "tech", "policy"]
+  },
+  {
+    "title": "The Hustle – Newsletter RSS",
+    "feed_url": "https://thehustle.co/rss",
+    "website": "https://thehustle.co/",
+    "tags": ["business", "newsletters", "startups"]
+  },
+  {
+    "title": "The Information – RSS",
+    "feed_url": "https://www.theinformation.com/rss",
+    "website": "https://www.theinformation.com/",
+    "tags": ["business", "tech", "deep-reporting"]
+  },
+  {
+    "title": "The New Yorker – Daily Comment Feed",
+    "feed_url": "https://www.newyorker.com/feed/news",
+    "website": "https://www.newyorker.com/",
+    "tags": ["culture", "longform", "news"]
+  },
+  {
+    "title": "The Next Web (TNW)",
+    "feed_url": "https://thenextweb.com/feed/",
+    "website": "https://thenextweb.com/",
+    "tags": ["tech", "startups", "gadgets"]
+  },
+  {
+    "title": "The Verge",
+    "feed_url": "https://www.theverge.com/rss/index.xml",
+    "website": "https://www.theverge.com/",
+    "tags": ["tech", "gadgets", "culture", "news"]
+  },
+  {
+    "title": "The Hustle",
+    "feed_url": "https://thehustle.co/rss",
+    "website": "https://thehustle.co/",
+    "tags": ["business", "newsletters", "startups"]
+  },
+  {
+    "title": "This American Life – Podcast",
+    "feed_url": "https://feeds.thisamericanlife.org/talpodcast",
+    "website": "https://www.thisamericanlife.org/",
+    "tags": ["podcast", "storytelling", "culture"]
+  },
+  {
+    "title": "TV & Comic: xkcd (comic) – Atom",
+    "feed_url": "https://xkcd.com/atom.xml",
+    "website": "https://xkcd.com/",
+    "tags": ["comics", "fun", "science"]
+  },
+  {
+    "title": "Readwise Blog",
+    "feed_url": "https://readwise.io/blog/rss",
+    "website": "https://readwise.io/blog/",
+    "tags": ["productivity", "reading", "notes"]
+  },
+  {
+    "title": "Smaller / niche: Indie Hackers",
+    "feed_url": "https://www.indiehackers.com/feed",
+    "website": "https://www.indiehackers.com/",
+    "tags": ["startups", "founders", "stories", "product"]
+  },
+  {
+    "title": "Smarter Every Day (Podcast/Blog)",
+    "feed_url": "https://www.smartereveryday.com/feed/",
+    "website": "https://www.smartereveryday.com/",
+    "tags": ["science", "education", "podcast"]
+  },
+  {
+    "title": "Smashing Magazine",
+    "feed_url": "https://www.smashingmagazine.com/feed/",
+    "website": "https://www.smashingmagazine.com/",
+    "tags": ["design", "frontend", "ux", "css", "webdev"]
+  },
+  {
+    "title": "Signal v. Noise (Basecamp)",
+    "feed_url": "https://m.signalvnoise.com/rss",
+    "website": "https://m.signalvnoise.com/",
+    "tags": ["product", "business", "design", "strategy"]
+  },
+  {
+    "title": "Stack Overflow – Recent Questions",
+    "feed_url": "https://stackoverflow.com/feeds",
+    "website": "https://stackoverflow.com/",
+    "tags": ["developer", "programming", "questions"]
+  },
+  {
+    "title": "TechCrunch",
+    "feed_url": "https://techcrunch.com/feed/",
+    "website": "https://techcrunch.com/",
+    "tags": ["tech", "startups", "venture", "news"]
+  },
+  {
+    "title": "Techmeme",
+    "feed_url": "https://www.techmeme.com/feed.xml",
+    "website": "https://www.techmeme.com/",
+    "tags": ["tech", "aggregation", "news", "trends"]
+  },
+  {
+    "title": "The Hustle (duplicate removed)",
+    "feed_url": "https://thehustle.co/rss",
+    "website": "https://thehustle.co/",
+    "tags": ["business", "newsletters", "startups"]
+  }
+]

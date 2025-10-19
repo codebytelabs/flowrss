@@ -1,0 +1,42 @@
+{
+  "name": "FlowRSS - Your content, in flow",
+  "short_name": "FlowRSS",
+  "description": "Privacy-first, offline-first RSS reader with AI-powered enhancements",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["news", "productivity", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "All Articles",
+      "short_name": "All",
+      "description": "View all articles",
+      "url": "/?view=all",
+      "icons": []
+    },
+    {
+      "name": "Starred",
+      "short_name": "Starred",
+      "description": "View starred articles",
+      "url": "/?view=starred",
+      "icons": []
+    }
+  ]
+}

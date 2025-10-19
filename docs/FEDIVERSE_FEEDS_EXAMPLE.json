@@ -1,0 +1,111 @@
+{
+  "description": "Example Fediverse feeds to add to PopularRSSFeeds.json",
+  "category": "Fediverse & Decentralized Social",
+  "feeds": [
+    {
+      "title": "Mastodon Official (@Gargron)",
+      "feed_url": "https://mastodon.social/@Gargron.rss",
+      "website": "https://mastodon.social/@Gargron",
+      "tags": ["fediverse", "mastodon", "social", "opensource"]
+    },
+    {
+      "title": "Fosstodon - Mozilla",
+      "feed_url": "https://fosstodon.org/@mozilla.rss",
+      "website": "https://fosstodon.org/@mozilla",
+      "tags": ["fediverse", "mozilla", "firefox", "opensource"]
+    },
+    {
+      "title": "Mastodon #OpenSource Hashtag",
+      "feed_url": "https://mastodon.social/tags/opensource.rss",
+      "website": "https://mastodon.social/tags/opensource",
+      "tags": ["fediverse", "opensource", "community"]
+    },
+    {
+      "title": "Mastodon #Privacy Hashtag",
+      "feed_url": "https://mastodon.social/tags/privacy.rss",
+      "website": "https://mastodon.social/tags/privacy",
+      "tags": ["fediverse", "privacy", "security"]
+    },
+    {
+      "title": "Lemmy - Programming Community",
+      "feed_url": "https://openrss.org/programming.dev/c/programming",
+      "website": "https://programming.dev/c/programming",
+      "tags": ["fediverse", "lemmy", "programming", "community"]
+    },
+    {
+      "title": "Lemmy - Linux Community",
+      "feed_url": "https://openrss.org/lemmy.ml/c/linux",
+      "website": "https://lemmy.ml/c/linux",
+      "tags": ["fediverse", "lemmy", "linux", "opensource"]
+    },
+    {
+      "title": "Lemmy - Technology (Beehaw)",
+      "feed_url": "https://openrss.org/beehaw.org/c/technology",
+      "website": "https://beehaw.org/c/technology",
+      "tags": ["fediverse", "lemmy", "technology", "news"]
+    },
+    {
+      "title": "Lemmy - Privacy Community",
+      "feed_url": "https://openrss.org/lemmy.ml/c/privacy",
+      "website": "https://lemmy.ml/c/privacy",
+      "tags": ["fediverse", "lemmy", "privacy", "security"]
+    },
+    {
+      "title": "Lemmy.world - All Posts (Hot)",
+      "feed_url": "https://openrss.org/lemmy.world/all/hot",
+      "website": "https://lemmy.world/",
+      "tags": ["fediverse", "lemmy", "aggregator"]
+    },
+    {
+      "title": "PeerTube - Framasoft Channel",
+      "feed_url": "https://framatube.org/feeds/videos.xml?videoChannelId=3",
+      "website": "https://framatube.org/",
+      "tags": ["fediverse", "peertube", "video", "opensource"]
+    },
+    {
+      "title": "Pixelfed - Photography Tag",
+      "feed_url": "https://pixelfed.social/discover/tags/photography.atom",
+      "website": "https://pixelfed.social/",
+      "tags": ["fediverse", "pixelfed", "photography", "images"]
+    }
+  ],
+  "notes": {
+    "mastodon_patterns": {
+      "user_feed": "https://{instance}/@{username}.rss",
+      "hashtag_feed": "https://{instance}/tags/{tag}.rss",
+      "examples": [
+        "https://mastodon.social/@Gargron.rss",
+        "https://fosstodon.org/@mozilla.rss",
+        "https://mastodon.social/tags/opensource.rss"
+      ]
+    },
+    "lemmy_patterns": {
+      "community": "https://openrss.org/{instance}/c/{community}",
+      "user": "https://openrss.org/{instance}/u/{username}",
+      "timeline_local": "https://openrss.org/{instance}/local",
+      "timeline_all": "https://openrss.org/{instance}/all",
+      "sorting": "Add /hot, /active, or /new for sorting",
+      "examples": [
+        "https://openrss.org/lemmy.ml/c/linux",
+        "https://openrss.org/programming.dev/c/programming",
+        "https://openrss.org/lemmy.world/all/hot"
+      ],
+      "note": "Lemmy doesn't have native RSS, so we use OpenRSS.org as a proxy"
+    },
+    "peertube_patterns": {
+      "channel": "https://{instance}/feeds/videos.xml?videoChannelId={id}",
+      "account": "https://{instance}/feeds/videos.xml?accountId={id}",
+      "examples": [
+        "https://framatube.org/feeds/videos.xml?videoChannelId=3"
+      ]
+    },
+    "implementation_notes": [
+      "All these feeds work with standard RSS parsers",
+      "No special code needed - just add to curated packs",
+      "Mastodon and PeerTube have native RSS support",
+      "Lemmy requires OpenRSS.org proxy (third-party service)",
+      "Consider adding a 'Fediverse' category in the UI",
+      "Could add a helper UI to convert Lemmy URLs to OpenRSS format"
+    ]
+  }
+}
