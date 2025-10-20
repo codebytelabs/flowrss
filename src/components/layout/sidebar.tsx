@@ -120,7 +120,7 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
               <img 
                 src="/logo-full.png" 
                 alt="FlowRSS" 
-                className="h-10 w-auto object-contain max-w-full"
+                className="h-12 w-auto object-contain max-w-[180px]"
               />
             </button>
             <Button
