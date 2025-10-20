@@ -5,6 +5,9 @@ import type { FeedFolder, Feed } from '@/types';
 import { dbOperations } from '@/lib/db/schema';
 import { ChevronRight, ChevronDown, Folder, MoreVertical, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useDroppable } from '@/hooks/use-droppable';
+import type { DraggableData } from '@/hooks/use-draggable';
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +30,25 @@ interface FolderItemProps {
 export function FolderItem({ folder, feeds, allFolders, selectedFeed, onSelectFeed, onUpdate }: FolderItemProps) {
   const [isCollapsed, setIsCollapsed] = useState(folder.isCollapsed ?? false);
   const [showEditDialog, setShowEditDialog] = useState(false);
+
+  // Drop functionality
+  const { isOver, canDrop, dropProps } = useDroppable({
+    onDrop: async (data: DraggableData) => {
+      if (data.type === 'feed') {
+        const feed = data.data as Feed;
+        await dbOperations.updateFeed(feed.id, { folderId: folder.id });
+        onUpdate();
+      }
+    },
+    canDrop: (data: DraggableData) => {
+      // Only allow feeds to be dropped
+      if (data.type !== 'feed') return false;
+      
+      // Don't allow dropping if already in this folder
+      const feed = data.data as Feed;
+      return feed.folderId !== folder.id;
+    },
+  });
 
   const toggleCollapse = async () => {
     const newState = !isCollapsed;
@@ -66,7 +88,14 @@ export function FolderItem({ folder, feeds, allFolders, selectedFeed, onSelectFe
 
   return (
     <div className="space-y-0.5">
-      <div className="flex items-center gap-1 px-2 py-1.5 rounded-md hover:bg-accent group">
+      <div 
+        {...dropProps}
+        className={cn(
+          'flex items-center gap-1 px-2 py-1.5 rounded-md hover:bg-accent group transition-colors',
+          isOver && canDrop && 'bg-accent border-2 border-primary',
+          isOver && !canDrop && 'bg-destructive/10'
+        )}
+      >
         {hasContent && (
           <Button
             variant="ghost"

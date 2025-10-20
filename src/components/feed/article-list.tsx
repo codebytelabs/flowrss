@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { dbOperations } from '@/lib/db/schema';
 import type { Article, Feed } from '@/types';
 import { TimelineCard } from './timeline-card';
-import { cn } from '@/lib/utils';
+import { PullToRefresh } from './pull-to-refresh';
 import { Rss, Plus } from 'lucide-react';
 
 interface ArticleListProps {
@@ -18,10 +18,6 @@ interface ArticleListProps {
 export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode, isRefreshing = false }: ArticleListProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPulling, setIsPulling] = useState(false);
-  const [pullDistance, setPullDistance] = useState(0);
-  const touchStartY = useRef(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     console.log('[ArticleList] Effect triggered - filterMode:', filterMode, 'feed:', feed?.title || 'none');
@@ -39,78 +35,6 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
       return () => clearInterval(pollInterval);
     }
   }, [articles.length, isLoading]);
-
-  // Cleanup mouse event listeners on unmount
-  useEffect(() => {
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
-
-  // Pull-to-refresh handlers (Touch - Mobile)
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
-      touchStartY.current = e.touches[0].clientY;
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartY.current === 0 || isRefreshing) return;
-    
-    const touchY = e.touches[0].clientY;
-    const distance = touchY - touchStartY.current;
-    
-    if (distance > 0 && scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
-      setIsPulling(true);
-      setPullDistance(Math.min(distance, 120)); // Max 120px pull
-    }
-  };
-
-  const handleTouchEnd = async () => {
-    if (pullDistance > 80 && !isRefreshing) {
-      // Trigger refresh
-      await loadArticles();
-    }
-    setIsPulling(false);
-    setPullDistance(0);
-    touchStartY.current = 0;
-  };
-
-  // Pull-to-refresh handlers (Mouse - Desktop)
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
-      touchStartY.current = e.clientY;
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      e.preventDefault(); // Prevent text selection
-    }
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (touchStartY.current === 0 || isRefreshing) return;
-    
-    const mouseY = e.clientY;
-    const distance = mouseY - touchStartY.current;
-    
-    if (distance > 0 && scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
-      setIsPulling(true);
-      setPullDistance(Math.min(distance, 120)); // Max 120px pull
-    }
-  };
-
-  const handleMouseUp = async () => {
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-    
-    if (pullDistance > 80 && !isRefreshing) {
-      // Trigger refresh
-      await loadArticles();
-    }
-    setIsPulling(false);
-    setPullDistance(0);
-    touchStartY.current = 0;
-  };
 
   const loadArticles = async () => {
     setIsLoading(true);
@@ -216,87 +140,44 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
   }
 
   return (
-    <div 
-      ref={scrollContainerRef}
-      className="flex-1 overflow-y-auto bg-background relative"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-    >
-      {/* Loading indicator at top */}
-      {(isRefreshing || isPulling) && (
-        <div 
-          className="sticky top-0 z-10 flex items-center justify-center py-4 bg-background/95 backdrop-blur-sm border-b border-border transition-all duration-200"
-          style={{
-            transform: isPulling ? `translateY(${pullDistance}px)` : 'translateY(0)',
-            opacity: isPulling ? pullDistance / 80 : 1
-          }}
-        >
-          <div className="flex items-center gap-3">
-            {/* Logo animation - using small logo */}
-            <div className={cn(
-              "w-12 h-12 rounded-lg flex items-center justify-center",
-              isRefreshing && "animate-pulse"
-            )}>
-              <img 
-                src="/logo-small.png" 
-                alt="FlowRSS" 
-                className={cn(
-                  "w-10 h-10 object-contain",
-                  isRefreshing && "animate-spin"
-                )}
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">
-                {isPulling && pullDistance < 80 ? 'Pull to refresh' : 
-                 isPulling && pullDistance >= 80 ? 'Release to refresh' :
-                 'Refreshing...'}
-              </span>
-              {isRefreshing && (
-                <span className="text-xs text-muted-foreground">Fetching latest articles</span>
+    <PullToRefresh onRefresh={loadArticles} disabled={isRefreshing}>
+      <div className="bg-background">
+        {/* Folo-inspired timeline layout */}
+        <div className="max-w-timeline mx-auto py-6 px-4">
+          {/* Timeline Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold mb-2">
+              {filterMode === 'starred' ? 'Starred Articles' : 
+               filterMode === 'saved' ? 'Saved Articles' :
+               feed ? feed.title : 'All Articles'}
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {articles.length > 0 ? (
+                `${articles.length} ${articles.length === 1 ? 'article' : 'articles'}`
+              ) : (
+                'No articles to show'
               )}
-            </div>
+            </p>
+          </div>
+
+          {/* Timeline Content */}
+          <div className="space-y-4 animate-fade-in">
+            {articles.map(article => (
+              <TimelineCard
+                key={article.id}
+                article={article}
+                isSelected={selectedArticle?.id === article.id}
+                onSelect={() => {
+                  onSelectArticle(article);
+                  dbOperations.markAsRead(article.id);
+                }}
+                onToggleStar={(e) => handleToggleStar(e, article.id)}
+                onToggleSave={(e) => handleToggleSave(e, article.id)}
+              />
+            ))}
           </div>
         </div>
-      )}
-
-      {/* Folo-inspired timeline layout */}
-      <div className="max-w-timeline mx-auto py-6 px-4">
-        {/* Timeline Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">
-            {filterMode === 'starred' ? 'Starred Articles' : 
-             filterMode === 'saved' ? 'Saved Articles' :
-             feed ? feed.title : 'All Articles'}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {articles.length > 0 ? (
-              `${articles.length} ${articles.length === 1 ? 'article' : 'articles'}`
-            ) : (
-              'No articles to show'
-            )}
-          </p>
-        </div>
-
-        {/* Timeline Content */}
-        <div className="space-y-4 animate-fade-in">
-          {articles.map(article => (
-            <TimelineCard
-              key={article.id}
-              article={article}
-              isSelected={selectedArticle?.id === article.id}
-              onSelect={() => {
-                onSelectArticle(article);
-                dbOperations.markAsRead(article.id);
-              }}
-              onToggleStar={(e) => handleToggleStar(e, article.id)}
-              onToggleSave={(e) => handleToggleSave(e, article.id)}
-            />
-          ))}
-        </div>
       </div>
-    </div>
+    </PullToRefresh>
   );
 }

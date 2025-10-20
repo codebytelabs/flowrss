@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { dbOperations } from '@/lib/db/schema';
-import type { Feed } from '@/types';
-import { ChevronRight, ChevronDown, Tag } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { FeedItem } from './feed-item';
+import { useState, useEffect } from "react";
+import { dbOperations } from "@/lib/db/schema";
+import type { Feed } from "@/types";
+import { ChevronRight, ChevronDown, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { FeedItem } from "./feed-item";
 
 interface CategoryListProps {
   feeds: Feed[];
@@ -16,22 +16,29 @@ interface CategoryListProps {
 
 // Default categories that feeds can be grouped into
 const DEFAULT_CATEGORIES = [
-  { name: 'Technology', icon: '💻', color: '#3b82f6' },
-  { name: 'Development', icon: '👨‍💻', color: '#8b5cf6' },
-  { name: 'AI', icon: '🤖', color: '#ec4899' },
-  { name: 'Design', icon: '🎨', color: '#f59e0b' },
-  { name: 'Business', icon: '🚀', color: '#10b981' },
-  { name: 'Crypto', icon: '₿', color: '#f59e0b' },
-  { name: 'News', icon: '🌍', color: '#06b6d4' },
-  { name: 'Science', icon: '🔬', color: '#6366f1' },
-  { name: 'Culture', icon: '📚', color: '#ec4899' },
-  { name: 'Productivity', icon: '⚡', color: '#10b981' },
-  { name: 'Entertainment', icon: '😄', color: '#f59e0b' },
-  { name: 'Fediverse', icon: '🌐', color: '#8b5cf6' },
+  { name: "Technology", icon: "💻", color: "#3b82f6" },
+  { name: "Development", icon: "👨‍💻", color: "#8b5cf6" },
+  { name: "AI", icon: "🤖", color: "#ec4899" },
+  { name: "Design", icon: "🎨", color: "#f59e0b" },
+  { name: "Business", icon: "🚀", color: "#10b981" },
+  { name: "Crypto", icon: "₿", color: "#f59e0b" },
+  { name: "News", icon: "🌍", color: "#06b6d4" },
+  { name: "Science", icon: "🔬", color: "#6366f1" },
+  { name: "Culture", icon: "📚", color: "#ec4899" },
+  { name: "Productivity", icon: "⚡", color: "#10b981" },
+  { name: "Entertainment", icon: "😄", color: "#f59e0b" },
+  { name: "Fediverse", icon: "🌐", color: "#8b5cf6" },
 ];
 
-export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate }: CategoryListProps) {
-  const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(new Set());
+export function CategoryList({
+  feeds,
+  selectedFeed,
+  onSelectFeed,
+  onFeedsUpdate,
+}: CategoryListProps) {
+  const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(
+    new Set()
+  );
   const [allFolders, setAllFolders] = useState<any[]>([]);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
   };
 
   const toggleCategory = (categoryName: string) => {
-    setCollapsedCategories(prev => {
+    setCollapsedCategories((prev) => {
       const next = new Set(prev);
       if (next.has(categoryName)) {
         next.delete(categoryName);
@@ -59,30 +66,31 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
   const feedsByCategory = feeds.reduce((acc, feed) => {
     // Skip feeds that are in folders
     if (feed.folderId) return acc;
-    
+
     // Support both single category and multiple categories
-    const categories = feed.categories || (feed.category ? [feed.category] : ['Uncategorized']);
-    
-    categories.forEach(category => {
+    const categories =
+      feed.categories || (feed.category ? [feed.category] : ["Uncategorized"]);
+
+    categories.forEach((category) => {
       if (!acc[category]) {
         acc[category] = [];
       }
       // Avoid duplicates
-      if (!acc[category].find(f => f.id === feed.id)) {
+      if (!acc[category].find((f) => f.id === feed.id)) {
         acc[category].push(feed);
       }
     });
-    
+
     return acc;
   }, {} as Record<string, Feed[]>);
 
   // Get categories that have feeds
-  const categoriesWithFeeds = DEFAULT_CATEGORIES.filter(cat => 
-    feedsByCategory[cat.name] && feedsByCategory[cat.name].length > 0
+  const categoriesWithFeeds = DEFAULT_CATEGORIES.filter(
+    (cat) => feedsByCategory[cat.name] && feedsByCategory[cat.name].length > 0
   );
 
   // Get uncategorized feeds
-  const uncategorizedFeeds = feedsByCategory['Uncategorized'] || [];
+  const uncategorizedFeeds = feedsByCategory["Uncategorized"] || [];
 
   if (categoriesWithFeeds.length === 0 && uncategorizedFeeds.length === 0) {
     return null;
@@ -90,7 +98,7 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
 
   return (
     <div className="space-y-1">
-      {categoriesWithFeeds.map(category => {
+      {categoriesWithFeeds.map((category) => {
         const categoryFeeds = feedsByCategory[category.name] || [];
         const isCollapsed = collapsedCategories.has(category.name);
         const unreadCount = 0; // TODO: Calculate unread count
@@ -132,7 +140,7 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
 
             {!isCollapsed && (
               <div className="ml-5 space-y-0.5">
-                {categoryFeeds.map(feed => (
+                {categoryFeeds.map((feed) => (
                   <FeedItem
                     key={feed.id}
                     feed={feed}
@@ -154,10 +162,10 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => toggleCategory('Uncategorized')}
+              onClick={() => toggleCategory("Uncategorized")}
               className="h-5 w-5 p-0 hover:bg-transparent"
             >
-              {collapsedCategories.has('Uncategorized') ? (
+              {collapsedCategories.has("Uncategorized") ? (
                 <ChevronRight className="h-3 w-3" />
               ) : (
                 <ChevronDown className="h-3 w-3" />
@@ -175,9 +183,9 @@ export function CategoryList({ feeds, selectedFeed, onSelectFeed, onFeedsUpdate 
             </span>
           </div>
 
-          {!collapsedCategories.has('Uncategorized') && (
+          {!collapsedCategories.has("Uncategorized") && (
             <div className="ml-5 space-y-0.5">
-              {uncategorizedFeeds.map(feed => (
+              {uncategorizedFeeds.map((feed) => (
                 <FeedItem
                   key={feed.id}
                   feed={feed}

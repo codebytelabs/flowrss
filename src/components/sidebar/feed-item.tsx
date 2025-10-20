@@ -5,6 +5,8 @@ import type { Feed, FeedFolder } from '@/types';
 import { dbOperations } from '@/lib/db/schema';
 import { Rss, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useDraggable } from '@/hooks/use-draggable';
+import { cn } from '@/lib/utils';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -37,6 +39,13 @@ interface FeedItemProps {
 
 export function FeedItem({ feed, isSelected, onClick, onUpdate, allFolders }: FeedItemProps) {
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Drag functionality
+  const { isDragging, dragHandleProps, dragImageRef } = useDraggable({
+    id: feed.id,
+    type: 'feed',
+    data: feed,
+  });
 
   useEffect(() => {
     loadUnreadCount();
@@ -74,9 +83,13 @@ export function FeedItem({ feed, isSelected, onClick, onUpdate, allFolders }: Fe
 
   const FeedContent = (
     <div
-      className={`flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer group ${
-        isSelected ? 'bg-accent' : 'hover:bg-accent'
-      }`}
+      ref={dragImageRef as React.RefObject<HTMLDivElement>}
+      {...dragHandleProps}
+      className={cn(
+        'flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer group transition-opacity',
+        isSelected ? 'bg-accent' : 'hover:bg-accent',
+        isDragging && 'opacity-50'
+      )}
       onClick={onClick}
     >
       <img
