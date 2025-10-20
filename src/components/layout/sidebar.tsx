@@ -107,27 +107,27 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
         )}
       >
         {/* Header - Folo style with clickable logo */}
-        <div className="p-4 border-b">
+        <div className="px-4 py-3 border-b">
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
                 onSelectFeed(null);
                 onFilterChange('all');
               }}
-              className="flex items-center hover:opacity-80 transition-opacity flex-1"
+              className="flex items-center hover:opacity-80 transition-opacity flex-1 -my-1"
               title="Go to home"
             >
               <img 
                 src="/logo-full.png" 
                 alt="FlowRSS" 
-                className="h-12 w-auto object-contain max-w-[180px]"
+                className="h-[76px] w-auto object-contain max-w-[244px]"
               />
             </button>
             <Button
               variant="ghost"
               size="icon"
               onClick={onToggle}
-              className="ml-auto lg:hidden"
+              className="ml-auto lg:hidden flex-shrink-0"
             >
               <X className="w-4 h-4" />
             </Button>
