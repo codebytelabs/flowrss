@@ -19,6 +19,7 @@ export function MainLayout() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [filterMode, setFilterMode] = useState<'all' | 'starred' | 'saved'>('all');
   const [articleListKey, setArticleListKey] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Handle filter changes from sidebar
   const handleFilterChange = (mode: 'all' | 'starred' | 'saved') => {
@@ -48,9 +49,13 @@ export function MainLayout() {
   useEffect(() => {
     const handleOpenAddFeed = () => setIsAddFeedOpen(true);
     const handleOpenSettings = () => setIsSettingsOpen(true);
-    const handleRefreshFeeds = () => {
+    const handleRefreshFeeds = async () => {
       console.log('[MainLayout] Refresh feeds event received');
+      setIsRefreshing(true);
+      // Simulate refresh delay for animation
+      await new Promise(resolve => setTimeout(resolve, 1000));
       setArticleListKey(prev => prev + 1); // Refresh article list
+      setIsRefreshing(false);
     };
 
     window.addEventListener('openAddFeed', handleOpenAddFeed);
@@ -107,6 +112,7 @@ export function MainLayout() {
           selectedArticle={selectedArticle}
           onSelectArticle={setSelectedArticle}
           filterMode={filterMode}
+          isRefreshing={isRefreshing}
         />
 
         {/* Article Reader */}

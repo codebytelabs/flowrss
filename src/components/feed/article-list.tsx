@@ -1,27 +1,61 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { dbOperations } from '@/lib/db/schema';
 import type { Article, Feed } from '@/types';
 import { TimelineCard } from './timeline-card';
 import { cn } from '@/lib/utils';
-import { Rss, Plus } from 'lucide-react';
+import { Rss, Plus, RefreshCw } from 'lucide-react';
 
 interface ArticleListProps {
   feed: Feed | null;
   selectedArticle: Article | null;
   onSelectArticle: (article: Article) => void;
   filterMode: 'all' | 'starred' | 'saved';
+  isRefreshing?: boolean;
 }
 
-export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode }: ArticleListProps) {
+export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode, isRefreshing = false }: ArticleListProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPulling, setIsPulling] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
+  const touchStartY = useRef(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     console.log('[ArticleList] Effect triggered - filterMode:', filterMode, 'feed:', feed?.title || 'none');
     loadArticles();
   }, [feed, filterMode]);
+
+  // Pull-to-refresh handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
+      touchStartY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartY.current === 0 || isRefreshing) return;
+    
+    const touchY = e.touches[0].clientY;
+    const distance = touchY - touchStartY.current;
+    
+    if (distance > 0 && scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
+      setIsPulling(true);
+      setPullDistance(Math.min(distance, 120)); // Max 120px pull
+    }
+  };
+
+  const handleTouchEnd = async () => {
+    if (pullDistance > 80 && !isRefreshing) {
+      // Trigger refresh
+      await loadArticles();
+    }
+    setIsPulling(false);
+    setPullDistance(0);
+    touchStartY.current = 0;
+  };
 
   const loadArticles = async () => {
     setIsLoading(true);
@@ -111,7 +145,47 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
   }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-background">
+    <div 
+      ref={scrollContainerRef}
+      className="flex-1 overflow-y-auto bg-background relative"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Loading indicator at top */}
+      {(isRefreshing || isPulling) && (
+        <div 
+          className="sticky top-0 z-10 flex items-center justify-center py-4 bg-background/95 backdrop-blur-sm border-b border-border transition-all duration-200"
+          style={{
+            transform: isPulling ? `translateY(${pullDistance}px)` : 'translateY(0)',
+            opacity: isPulling ? pullDistance / 80 : 1
+          }}
+        >
+          <div className="flex items-center gap-3">
+            {/* Logo animation */}
+            <div className={cn(
+              "w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center",
+              isRefreshing && "animate-pulse"
+            )}>
+              <Rss className={cn(
+                "w-5 h-5 text-white",
+                isRefreshing && "animate-spin"
+              )} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">
+                {isPulling && pullDistance < 80 ? 'Pull to refresh' : 
+                 isPulling && pullDistance >= 80 ? 'Release to refresh' :
+                 'Refreshing...'}
+              </span>
+              {isRefreshing && (
+                <span className="text-xs text-muted-foreground">Fetching latest articles</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Folo-inspired timeline layout */}
       <div className="max-w-timeline mx-auto py-6 px-4">
         {/* Timeline Header */}
