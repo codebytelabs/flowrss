@@ -7,7 +7,7 @@ import { parseFeedUrl } from '@/lib/rss/parser';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Rss, Sparkles, Shield, Zap } from 'lucide-react';
+import { Sparkles, Shield, Zap } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onComplete: () => void;
@@ -151,9 +151,18 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
     );
   }
 
+  // Group packs by category
+  const categories = [
+    { name: 'Technology & Development', ids: ['tech-news', 'developer', 'ai-ml'] },
+    { name: 'Fediverse', ids: ['fediverse-mastodon', 'fediverse-lemmy', 'fediverse-mixed'] },
+    { name: 'Business & Design', ids: ['business-startups', 'design-ux'] },
+    { name: 'Knowledge & Culture', ids: ['science-research', 'culture-longform', 'productivity'] },
+    { name: 'More', ids: ['crypto-web3', 'news-world', 'fun-comics'] },
+  ];
+
   return (
     <div className="min-h-screen p-4 md:p-8 bg-background">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-10">
         {/* Header with Logo */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-4">
@@ -165,72 +174,51 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
             />
           </div>
           <h2 className="text-3xl font-bold">Choose Your Feeds</h2>
-          <p className="text-muted-foreground">
-            Select curated packs or add your own feeds. <span className="font-semibold text-foreground">All stored locally on your device.</span>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Select curated packs to get started. <span className="font-semibold text-foreground">All stored locally on your device.</span>
           </p>
         </div>
 
-        {/* Popular Packs */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Popular Packs</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {popularPacks.map(pack => (
-              <Card
-                key={pack.id}
-                className={`p-5 cursor-pointer transition-all rounded-xl border ${
-                  selectedPacks.includes(pack.id)
-                    ? 'ring-2 ring-primary bg-primary/5 border-primary'
-                    : 'border-border hover:border-primary/50 hover:shadow-md'
-                }`}
-                onClick={() => handlePackToggle(pack.id)}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="text-3xl flex-shrink-0">{pack.icon}</div>
-                  <div className="flex-1 space-y-1.5">
-                    <h4 className="font-semibold text-sm">{pack.name}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {pack.description}
-                    </p>
-                    <p className="text-xs text-muted-foreground font-medium">
-                      {pack.feeds.length} feeds
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+        {/* Categorized Packs */}
+        {categories.map(category => {
+          const categoryPacks = allPacks.filter(pack => category.ids.includes(pack.id));
+          if (categoryPacks.length === 0) return null;
 
-        {/* All Packs */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">All Packs</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {allPacks.filter(pack => !pack.isPopular).map(pack => (
-              <Card
-                key={pack.id}
-                className={`p-5 cursor-pointer transition-all rounded-xl border ${
-                  selectedPacks.includes(pack.id)
-                    ? 'ring-2 ring-primary bg-primary/5 border-primary'
-                    : 'border-border hover:border-primary/50 hover:shadow-md'
-                }`}
-                onClick={() => handlePackToggle(pack.id)}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="text-3xl flex-shrink-0">{pack.icon}</div>
-                  <div className="flex-1 space-y-1.5">
-                    <h4 className="font-semibold text-sm">{pack.name}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {pack.description}
-                    </p>
-                    <p className="text-xs text-muted-foreground font-medium">
-                      {pack.feeds.length} feeds
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+          return (
+            <div key={category.name} className="space-y-4">
+              <div className="flex items-center gap-3">
+                <h3 className="text-xl font-bold">{category.name}</h3>
+                <div className="flex-1 h-px bg-border"></div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {categoryPacks.map(pack => (
+                  <Card
+                    key={pack.id}
+                    className={`p-5 cursor-pointer transition-all rounded-xl border ${
+                      selectedPacks.includes(pack.id)
+                        ? 'ring-2 ring-primary bg-primary/5 border-primary'
+                        : 'border-border hover:border-primary/50 hover:shadow-md'
+                    }`}
+                    onClick={() => handlePackToggle(pack.id)}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl flex-shrink-0">{pack.icon}</div>
+                      <div className="flex-1 space-y-1.5">
+                        <h4 className="font-semibold text-sm">{pack.name}</h4>
+                        <p className="text-xs text-muted-foreground line-clamp-2">
+                          {pack.description}
+                        </p>
+                        <p className="text-xs text-muted-foreground font-medium">
+                          {pack.feeds.length} feeds
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          );
+        })}
 
         <div className="space-y-4 pt-4">
           <h3 className="text-lg font-semibold">Or add a custom feed</h3>
