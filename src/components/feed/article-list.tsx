@@ -28,7 +28,15 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
     loadArticles();
   }, [feed, filterMode]);
 
-  // Pull-to-refresh handlers
+  // Cleanup mouse event listeners on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  // Pull-to-refresh handlers (Touch - Mobile)
   const handleTouchStart = (e: React.TouchEvent) => {
     if (scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
       touchStartY.current = e.touches[0].clientY;
@@ -48,6 +56,41 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
   };
 
   const handleTouchEnd = async () => {
+    if (pullDistance > 80 && !isRefreshing) {
+      // Trigger refresh
+      await loadArticles();
+    }
+    setIsPulling(false);
+    setPullDistance(0);
+    touchStartY.current = 0;
+  };
+
+  // Pull-to-refresh handlers (Mouse - Desktop)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
+      touchStartY.current = e.clientY;
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      e.preventDefault(); // Prevent text selection
+    }
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (touchStartY.current === 0 || isRefreshing) return;
+    
+    const mouseY = e.clientY;
+    const distance = mouseY - touchStartY.current;
+    
+    if (distance > 0 && scrollContainerRef.current && scrollContainerRef.current.scrollTop === 0) {
+      setIsPulling(true);
+      setPullDistance(Math.min(distance, 120)); // Max 120px pull
+    }
+  };
+
+  const handleMouseUp = async () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+    
     if (pullDistance > 80 && !isRefreshing) {
       // Trigger refresh
       await loadArticles();
@@ -151,6 +194,7 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
     >
       {/* Loading indicator at top */}
       {(isRefreshing || isPulling) && (
