@@ -164,14 +164,14 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
           <div className="flex items-center gap-3">
             {/* Logo animation - using small logo */}
             <div className={cn(
-              "w-10 h-10 rounded-lg flex items-center justify-center",
+              "w-12 h-12 rounded-lg flex items-center justify-center",
               isRefreshing && "animate-pulse"
             )}>
               <img 
                 src="/logo-small.png" 
                 alt="FlowRSS" 
                 className={cn(
-                  "w-8 h-8 object-contain",
+                  "w-10 h-10 object-contain",
                   isRefreshing && "animate-spin"
                 )}
               />

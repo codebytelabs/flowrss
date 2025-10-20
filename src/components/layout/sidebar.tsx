@@ -114,13 +114,13 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
                 onSelectFeed(null);
                 onFilterChange('all');
               }}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              className="flex items-center hover:opacity-80 transition-opacity flex-1"
               title="Go to home"
             >
               <img 
                 src="/logo-full.png" 
                 alt="FlowRSS" 
-                className="h-8 w-auto object-contain"
+                className="h-10 w-auto object-contain max-w-full"
               />
             </button>
             <Button
