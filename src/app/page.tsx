@@ -76,7 +76,13 @@ export default function Home() {
   }
 
   if (!hasFeeds) {
-    return <WelcomeScreen onComplete={() => setHasFeeds(true)} />;
+    return <WelcomeScreen onComplete={async () => {
+      setHasFeeds(true);
+      // Trigger a refresh event after a short delay to let the MainLayout mount
+      setTimeout(() => {
+        window.dispatchEvent(new Event('refreshFeeds'));
+      }, 500);
+    }} />;
   }
 
   return <MainLayout />;

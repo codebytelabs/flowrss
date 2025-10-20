@@ -28,6 +28,18 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
     loadArticles();
   }, [feed, filterMode]);
 
+  // Poll for new articles every 5 seconds when list is empty
+  useEffect(() => {
+    if (articles.length === 0 && !isLoading) {
+      const pollInterval = setInterval(() => {
+        console.log('[ArticleList] Polling for new articles...');
+        loadArticles();
+      }, 5000);
+
+      return () => clearInterval(pollInterval);
+    }
+  }, [articles.length, isLoading]);
+
   // Cleanup mouse event listeners on unmount
   useEffect(() => {
     return () => {
@@ -181,7 +193,23 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
     return (
       <div className="flex-1 overflow-y-auto bg-background">
         <div className="max-w-timeline mx-auto py-6 px-4">
-          <EmptyState />
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <img 
+                  src="/logo-small.png" 
+                  alt="FlowRSS" 
+                  className="w-12 h-12 object-contain animate-pulse"
+                />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Fetching articles...</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-sm">
+                Loading your feeds. This may take a moment.
+              </p>
+            </div>
+          ) : (
+            <EmptyState />
+          )}
         </div>
       </div>
     );
