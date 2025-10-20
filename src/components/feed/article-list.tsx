@@ -5,7 +5,7 @@ import { dbOperations } from '@/lib/db/schema';
 import type { Article, Feed } from '@/types';
 import { TimelineCard } from './timeline-card';
 import { cn } from '@/lib/utils';
-import { Rss, Plus, RefreshCw } from 'lucide-react';
+import { Rss, Plus } from 'lucide-react';
 
 interface ArticleListProps {
   feed: Feed | null;
@@ -162,15 +162,19 @@ export function ArticleList({ feed, selectedArticle, onSelectArticle, filterMode
           }}
         >
           <div className="flex items-center gap-3">
-            {/* Logo animation */}
+            {/* Logo animation - using small logo */}
             <div className={cn(
-              "w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center",
+              "w-10 h-10 rounded-lg flex items-center justify-center",
               isRefreshing && "animate-pulse"
             )}>
-              <Rss className={cn(
-                "w-5 h-5 text-white",
-                isRefreshing && "animate-spin"
-              )} />
+              <img 
+                src="/logo-small.png" 
+                alt="FlowRSS" 
+                className={cn(
+                  "w-8 h-8 object-contain",
+                  isRefreshing && "animate-spin"
+                )}
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium">

@@ -106,13 +106,23 @@ export function Sidebar({ isOpen, onToggle, selectedFeed, onSelectFeed, onFilter
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        {/* Header - Folo style */}
+        {/* Header - Folo style with clickable logo */}
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
-              <Rss className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-lg">FlowRSS</span>
+            <button
+              onClick={() => {
+                onSelectFeed(null);
+                onFilterChange('all');
+              }}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              title="Go to home"
+            >
+              <img 
+                src="/logo-full.png" 
+                alt="FlowRSS" 
+                className="h-8 w-auto object-contain"
+              />
+            </button>
             <Button
               variant="ghost"
               size="icon"
